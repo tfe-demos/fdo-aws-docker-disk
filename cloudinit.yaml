@@ -38,7 +38,6 @@ packages:
 
 write_files:
 - content: |
-    alias update='sudo apt update && sudo apt autoremove && sudo apt auto-clean'
     export TFE_LICENSE="$(cat /opt/tfe/license.hclic)"
     export TFE_HOSTNAME=tfeparty.cfd
   path: /home/ubuntu/.profile
@@ -51,7 +50,7 @@ runcmd:
  - cp /home/ubuntu/tfeparty/*pem /opt/tfe/certs/
  - cp /home/ubuntu/tfeparty/license.hclic /opt/tfe/
  - cp /home/ubuntu/tfeparty/compose.yaml /opt/tfe/
-# Create Network where the container used to execute Terraform runs will be created
+# Create Network where the containers used to execute Terraform runs will be created
  - docker network create tfe-runners
 # Block Terraform Enterprise access to the EC2 instance metadata service at `169.254.169.254` where source is subnet of the created docker network 
  - iptables -I DOCKER-USER -d 169.254.169.254 -s 172.18.0.0/16 -j DROP

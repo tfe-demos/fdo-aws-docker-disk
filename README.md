@@ -20,7 +20,7 @@ sudo certbot renew --dry-run          # Verify Renew
 ```
 - Update the TFE_HOSTNAME in `cloudinit.yaml`
 ```
-    export TFE_HOSTNAME=tfeparty.cfd
+#42    export TFE_HOSTNAME=tfeparty.cfd
 ```
 - Add your TFE license to the file `tfeparty/license.hclic`
 - Setup your AWS env
