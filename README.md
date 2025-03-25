@@ -1,12 +1,12 @@
-This repo demonstrates deploying TFE FDO Docker on AWS in "Mounted Disk" operational mode using publicly signed certs from "Let's Encrypt"
+This repo demonstrates deploying TFE FDO Docker on AWS in "Mounted Disk" operational mode using publicly signed certificates
 
-#### Versions
+#### Versions in use
 TFE `v202502-1`
 Docker `v26.1.4`
 OS `Ubuntu 22.04`
 
 #### Prerequisites
-- Bring your own domain and SSL certificates. Make sure to rename and add your certs to the directory "tfeparty"
+- Bring your own Domain and SSL certificates. Make sure to rename and add your certs to the directory "tfeparty"
 ```
 cert.pem    # Server Cert
 key.pem     # Server Key
