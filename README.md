@@ -98,7 +98,7 @@ terraform login tfeparty.cfd
 cat << EOF > main.tf
 terraform {
   cloud {
-    hostname     = "tfeparty.cfd"
+    hostname     = "${TFE_HOSTNAME}"
     organization = "test-org"
 
     workspaces {
