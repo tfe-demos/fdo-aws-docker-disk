@@ -91,7 +91,9 @@ Lastly, test login to the UI at `https://${TFE_HOSTNAME}`
 - test-workspace
 
 ### Login to TFE from the EC2 instance
+```
 terraform login tfeparty.cfd
+```
 
 ### Create a simple TF module and test Run on TFE
 ```
