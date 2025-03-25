@@ -1,0 +1,48 @@
+name: terraform-enterprise
+services:
+  tfe:
+    image: images.releases.hashicorp.com/hashicorp/terraform-enterprise:v202502-1
+    environment:
+      TFE_LICENSE:
+      TFE_LICENSE_REPORTING_OPT_OUT: true
+      TFE_HOSTNAME:
+      TFE_ENCRYPTION_PASSWORD: 'mak'
+      # Encryption password used to encrypt and decrypt the internal Vault root token and unseal key.
+      TFE_OPERATIONAL_MODE: "disk"
+      TFE_DISK_CACHE_VOLUME_NAME: "${COMPOSE_PROJECT_NAME}_terraform-enterprise-cache"
+      TFE_TLS_CERT_FILE: "/etc/ssl/private/terraform-enterprise/cert.pem"
+      TFE_TLS_KEY_FILE: "/etc/ssl/private/terraform-enterprise/key.pem"
+      TFE_TLS_CA_BUNDLE_FILE: "/etc/ssl/private/terraform-enterprise/bundle.pem"
+      TFE_RUN_PIPELINE_DOCKER_NETWORK: "tfe-runners"
+      # Network where the container used to execute Terraform runs will be created
+      TFE_METRICS_ENABLE: true
+      TFE_LOG_LEVEL: debug
+      TFE_IACT_SUBNETS: "172.0.0.0/8,10.0.0.0/8,192.168.0.0/16,${TFE_HOSTNAME}" 
+      # Subnets allowed to retrieve the initial admin creation token via the API
+      # If you do not set this value, you must gain access to the container or pod command line
+      # and run curl http://localhost:80/admin/retrieve-iact to retrieve the initial admin token.
+    cap_add:
+      - IPC_LOCK
+    read_only: true
+    tmpfs:
+      - /tmp:mode=01777
+      - /run
+      - /var/log/terraform-enterprise
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /run/docker.sock
+      - type: bind
+        source: ./certs
+        target: /etc/ssl/private/terraform-enterprise
+      - type: bind
+        source: /opt/tfe
+        target: /var/lib/terraform-enterprise
+      - type: volume
+        source: terraform-enterprise-cache
+        target: /var/cache/tfe-task-worker/terraform
+volumes:
+  terraform-enterprise-cache:
