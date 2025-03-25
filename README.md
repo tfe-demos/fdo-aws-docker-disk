@@ -5,7 +5,7 @@ TFE `v202502-1`
 Docker `v26.1.4`
 OS `Ubuntu 22.04`
 
-### Prerequisite
+### Prerequisites
 - Bring your own Domain and SSL certificates. Make sure to rename and add your certs to the directory "tfeparty"
 ```
 cert.pem    # Server Cert
