@@ -1,11 +1,11 @@
 This repo demonstrates deploying TFE FDO Docker on AWS in "Mounted Disk" operational mode using publicly signed certificates
 
-#### Versions in use
+### Versions in use
 TFE `v202502-1`
 Docker `v26.1.4`
 OS `Ubuntu 22.04`
 
-#### Prerequisites
+### Prerequisites
 - Bring your own Domain and SSL certificates. Make sure to rename and add your certs to the directory "tfeparty"
 ```
 cert.pem    # Server Cert
@@ -31,14 +31,14 @@ export AWS_SESSION_TOKEN=
 ```
 - The repo defaults to `var.region=eu-north-1` If you set a different region make sure to set the correct `var.ami` for Ubuntu 22.04 of that region
 
-#### Deploy Infrastructure
+### Deploy Infrastructure
 ```
 terraform init
 terraform plan
 terraform apply -auto-approve
 ```
 
-#### Login using the domain name
+### Login using the domain name
 ```
 ssh -i ubuntu.pem ubuntu@tfeparty.cfd
 ```
@@ -53,13 +53,13 @@ If not, monitor with `cloud-init status --wait` till finished then re-login to t
 env | grep TFE
 ```
 
-#### Deploy TFE
+### Deploy TFE
 ```
 echo $TFE_LICENSE | docker login --username terraform images.releases.hashicorp.com --password-stdin
 docker compose --file /opt/tfe/compose.yaml up --detach
 ```
 
-#### Optional commands for monitoring and troubleshooting
+### Optional commands for monitoring and troubleshooting
 ```
 docker compose --file /opt/tfe/compose.yaml exec tfe tfe-health-check-status
 docker exec terraform-enterprise-tfe-1 tfe-health-check-status
@@ -70,7 +70,7 @@ docker exec terraform-enterprise-tfe-1 supervisorctl tail -f <NAME> #tfe:vault
 docker exec terraform-enterprise-tfe-1 tfectl app config --unredacted
 ```
 
-#### Create initial admin user using IACT (Initial Admin Creation Token)
+### Create initial admin user using IACT (Initial Admin Creation Token)
 The following command will return a URL to navigate to and create user form GUI directly
 ```
 docker exec terraform-enterprise-tfe-1 tfectl admin token --url
@@ -86,14 +86,14 @@ curl --header "Content-Type: application/json" --request POST --data @tfeparty/a
 ```
 Lastly, test login to the UI at `https://${TFE_HOSTNAME}`
 
-#### Create TFE Organization, and CLI Workspace
+### Create TFE Organization, and CLI Workspace
 - test-org
 - test-workspace
 
-#### Login to TFE from the EC2 instance
+### Login to TFE from the EC2 instance
 terraform login tfeparty.cfd
 
-#### Create a simple TF module and test Run on TFE
+### Create a simple TF module and test Run on TFE
 ```
 cat << EOF > main.tf
 terraform {
@@ -119,15 +119,15 @@ terraform plan
 terraform apply
 ```
 
-#### Optional: Add a "variable set" to your "TFE Organization > Settings" with your AWS credenetials to be able to create AWS resrouces using TFE
+### Optional: Add a "variable set" to your "TFE Organization > Settings" with your AWS credenetials to be able to create AWS resrouces using TFE
 
-#### Optional: Integrate with Non-Enterprise Github using OAuth
+### Optional: Integrate with Non-Enterprise Github using OAuth
 - TFE > Organization > Settings > Providers > Add VCS Provider > Github.com > Click "register a new OAuth app"
 - Populate the fields on Github from TFE
 - From Github provide Client ID and Secret to TFE
 - Create and configure a "Github" type workspace, and observe GH pull-requests triggering plan, and GH commits triggering plan+apply
 
-#### Cleanup
+### Cleanup
 ```
 docker compose --file /opt/tfe/compose.yaml down
 docker compose --file /opt/tfe/compose.yaml down --rmi all --volumes
