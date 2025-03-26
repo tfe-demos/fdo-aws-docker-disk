@@ -53,7 +53,11 @@ If not, monitor with `cloud-init status --wait` till finished then re-login to t
 env | grep TFE
 ```
 
-
+### Deploy TFE
+```
+echo $TFE_LICENSE | docker login --username terraform images.releases.hashicorp.com --password-stdin
+docker compose --file /opt/tfe/compose.yaml up --detach
+```
 
 ### Optional commands for monitoring and troubleshooting
 ```
